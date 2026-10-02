@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101114">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="存档点">
+<title>SAVE POINT · 存档点</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<style>
+:root{--bg:#101114;--panel:#181a1f;--panel2:#20232a;--line:#2d3038;--text:#f6f3eb;--muted:#9b9ca2;--accent:#f4d35e;--green:#72d6a0;--red:#ef7b7b}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Microsoft YaHei",sans-serif}
+body{background:radial-gradient(circle at 80% -10%,#34302a 0,transparent 30%),var(--bg)}
+main{max-width:900px;margin:auto;padding:calc(22px + env(safe-area-inset-top)) 18px calc(80px + env(safe-area-inset-bottom))}
+.top{display:flex;justify-content:space-between;align-items:start;gap:18px}.logo{font-size:12px;letter-spacing:.22em;color:var(--muted)}.logo b{display:block;color:var(--text);font-size:25px;letter-spacing:.08em;margin-top:5px}.day{text-align:right;color:var(--muted);font-size:13px}.day strong{display:block;color:var(--accent);font-size:18px}
+.hero{margin:42px 0 26px}.date{color:var(--muted);font-size:14px}.hero h1{font-size:clamp(34px,7vw,58px);line-height:1.08;margin:10px 0 12px;letter-spacing:-.04em}.hero p{color:var(--muted);font-size:16px;margin:0;line-height:1.7}
+.trace{margin-top:24px;border:1px solid var(--line);border-radius:22px;padding:18px;background:linear-gradient(135deg,#1a1c21,#15171b);display:flex;gap:14px;align-items:center}
+.trace .dot{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:#292b31;font-size:21px}.trace.done .dot{background:#173526}.trace strong{display:block;font-size:17px}.trace span{display:block;color:var(--muted);font-size:13px;margin-top:4px}
+h2{font-size:15px;color:var(--muted);font-weight:600;margin:30px 0 12px}
+.apps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.app{min-height:165px;border:1px solid var(--line);border-radius:22px;background:var(--panel);padding:18px;color:inherit;text-decoration:none;display:flex;flex-direction:column;transition:.15s}.app:active{transform:scale(.98);background:var(--panel2)}.icon{font-size:29px}.app b{font-size:20px;margin-top:auto}.app small{color:var(--muted);margin-top:6px;line-height:1.45}.go{color:var(--accent);font-size:13px;margin-top:12px}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:12px}.quick button{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:18px;padding:16px;text-align:left;font-size:15px}.quick small{display:block;color:var(--muted);margin-top:5px}
+.timeline{display:grid;gap:9px}.entry{display:flex;gap:12px;align-items:start;padding:14px 4px;border-bottom:1px solid #23252b}.entry time{width:58px;color:var(--muted);font-size:12px}.entry div{flex:1;font-size:14px}.empty{color:var(--muted);padding:18px 0;font-size:14px}
+.sheet{position:fixed;inset:0;background:#0009;display:none;align-items:end;z-index:10}.sheet.open{display:flex}.box{width:100%;max-width:900px;margin:auto;background:#1b1d22;border-radius:24px 24px 0 0;padding:22px 18px calc(24px + env(safe-area-inset-bottom))}.box h3{margin:0 0 14px}.box input,.box textarea{width:100%;border:1px solid var(--line);background:#101216;color:var(--text);border-radius:14px;padding:13px;font:inherit;margin-bottom:10px}.box textarea{min-height:90px;resize:vertical}.row{display:flex;gap:10px}.btn{border:0;border-radius:14px;padding:13px 16px;font-weight:700;background:#2b2e35;color:var(--text)}.btn.primary{background:var(--accent);color:#171717;flex:1}
+.footer{margin-top:34px;color:#666a73;font-size:12px;line-height:1.7;text-align:center}
+@media(max-width:650px){.apps{grid-template-columns:1fr}.app{min-height:126px}.quick{grid-template-columns:1fr}.hero{margin-top:34px}.app b{margin-top:22px}}
+</style>
+</head>
+<body>
+<main>
+<header class="top"><div class="logo">PERSONAL LIFE OS<b>SAVE POINT</b></div><div class="day">你来到世界的第<strong id="lifeDay">—</strong>天</div></header>
+<section class="hero"><div class="date" id="today"></div><h1 id="headline">今天，留下点什么。</h1><p id="subline">不用完成一切。行动、探索、记住一件事，就算今天留下了痕迹。</p>
+<div class="trace" id="trace"><div class="dot" id="traceIcon">○</div><div><strong id="traceTitle">今天还没有留下痕迹</strong><span id="traceText">做一件值得记住的小事。</span></div></div></section>
+
+<h2>推进今天</h2>
+<section class="apps">
+<a class="app" href="https://dongdong-web.github.io/PB/"><span class="icon">⚡</span><b>行动</b><small>和昨天的自己比赛<br>打开 PB，马上开始。</small><span class="go">开始挑战 →</span></a>
+<a class="app" href="https://dongdong-web.github.io/citymap/"><span class="icon">🎲</span><b>探索</b><small>不要总走同一条路<br>随机一条哈尔滨街道。</small><span class="go">抽取街道 →</span></a>
+<a class="app" href="https://dongdong-web.github.io/life-is-galgame/"><span class="icon">💾</span><b>剧情</b><small>事件 → 选择 → 结局<br>记住上一次发生了什么。</small><span class="go">保存剧情 →</span></a>
+</section>
+
+<h2>给今天一个标记</h2>
+<section class="quick">
+<button id="markBtn">✦ 我今天留下了痕迹<small>不需要解释，点一下就够了</small></button>
+<button id="noteBtn">＋ 写一句今天<small>10 秒钟留下一条私人记录</small></button>
+</section>
+
+<h2>最近的存档</h2>
+<section class="timeline" id="timeline"></section>
+
+<div class="footer">数据只保存在这个浏览器中。建议定期导出备份到 iCloud Drive。<br><button class="btn" id="exportBtn" style="margin-top:10px">导出 SAVE POINT 存档</button></div>
+</main>
+
+<div class="sheet" id="sheet"><div class="box"><h3>今天发生了什么？</h3><textarea id="note" placeholder="一句话就够了。"></textarea><div class="row"><button class="btn" id="cancelBtn">取消</button><button class="btn primary" id="saveBtn">留下痕迹</button></div></div></div>
+
+<script>
+const KEY='savePoint.v1';
+const BIRTH=new Date(2001,7,11);
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,'0');
+const keyOf=(d=new Date())=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+let data=JSON.parse(localStorage.getItem(KEY)||'{"days":{}}');
+function save(){localStorage.setItem(KEY,JSON.stringify(data))}
+function fmtDate(d){return `${d.getFullYear()} 年 ${d.getMonth()+1} 月 ${d.getDate()} 日 · ${['星期日','星期一','星期二','星期三','星期四','星期五','星期六'][d.getDay()]}`}
+function init(){
+ const now=new Date(); $('today').textContent=fmtDate(now);
+ $('lifeDay').textContent=Math.floor((new Date(now.getFullYear(),now.getMonth(),now.getDate())-BIRTH)/86400000)+1;
+ render();
+}
+function render(){
+ const k=keyOf(), rec=data.days[k], done=!!rec;
+ $('trace').classList.toggle('done',done); $('traceIcon').textContent=done?'✓':'○';
+ $('traceTitle').textContent=done?'今天留下了痕迹':'今天还没有留下痕迹';
+ $('traceText').textContent=done?(rec.notes?.length?rec.notes[rec.notes.length-1]:'这一天不是空白。'):'做一件值得记住的小事。';
+ $('headline').textContent=done?'今天已经存档。':'今天，留下点什么。';
+ const rows=Object.entries(data.days).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,8);
+ $('timeline').innerHTML=rows.length?rows.map(([d,r])=>`<div class="entry"><time>${d.slice(5).replace('-','/')}</time><div>${escapeHtml(r.notes?.[r.notes.length-1]||'今天留下了痕迹。')}</div></div>`).join(''):'<div class="empty">还没有存档。第一条记录从今天开始。</div>';
+}
+function mark(text){
+ const k=keyOf(); data.days[k] ||= {notes:[],createdAt:new Date().toISOString()};
+ if(text) data.days[k].notes.push(text); save(); render();
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+$('markBtn').onclick=()=>mark('');
+$('noteBtn').onclick=()=>{$('sheet').classList.add('open');$('note').focus()};
+$('cancelBtn').onclick=()=>$('sheet').classList.remove('open');
+$('saveBtn').onclick=()=>{const t=$('note').value.trim();if(!t)return;mark(t);$('note').value='';$('sheet').classList.remove('open')};
+$('sheet').onclick=e=>{if(e.target===$('sheet'))$('sheet').classList.remove('open')};
+$('exportBtn').onclick=()=>{
+ const blob=new Blob([JSON.stringify({app:'SAVE POINT',version:1,exportedAt:new Date().toISOString(),data},null,2)],{type:'application/json'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`save-point-${keyOf()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+};
+init();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>
