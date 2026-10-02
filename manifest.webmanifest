@@ -1,9 +1,9 @@
 {
-  "name": "SAVE POINT · 存档点",
-  "short_name": "存档点",
+  "name": "SAVE POINT",
+  "short_name": "SAVE POINT",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#101114",
-  "theme_color": "#101114",
-  "description": "你的个人生活存档点"
+  "background_color": "#ebe7de",
+  "theme_color": "#ebe7de",
+  "description": "行动、探索与人生剧情的统一个人存档"
 }
